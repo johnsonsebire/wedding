@@ -22,3 +22,8 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Paystack documentation with sensitive examples
+PAYSTACK_INTEGRATION.md
+PAYSTACK_SETUP.md
+SETUP_PAYMENT.txt
