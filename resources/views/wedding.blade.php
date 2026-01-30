@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Johnson & Partner - Wedding</title>
+    <title>Johnson & Dorothy - Wedding</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.paystack.co/v2/inline.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         body {
@@ -363,10 +364,10 @@
                     <div class="text-4xl mb-4 text-center">💳</div>
                     <h3 class="text-2xl font-bold mb-4 text-white text-center">Online Option</h3>
                     <p class="text-white/90 text-center mb-4">
-                        If you'd prefer to send your gift digitally, you can do so securely through bank transfer or mobile money.
+                        If you'd prefer to send your gift digitally, you can do so securely through our online payment system.
                     </p>
                     <div class="text-center">
-                        <button class="bg-white text-[#b82a36] px-6 py-3 rounded-lg font-semibold hover:bg-amber-100 transition">
+                        <button onclick="openPaymentModal()" class="bg-white text-[#b82a36] px-6 py-3 rounded-lg font-semibold hover:bg-amber-100 transition shadow-lg">
                             Send a Cash Gift
                         </button>
                     </div>
@@ -379,6 +380,46 @@
             </div>
         </div>
     </section>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50" onclick="closePaymentModal(event)">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden" onclick="event.stopPropagation()">
+            <div class="bg-gradient-to-r from-[#b82a36] to-[#d4af37] px-6 py-4">
+                <h3 class="text-2xl font-bold text-white">Send a Wedding Gift</h3>
+                <p class="text-white/90 text-sm">Your love and support mean the world to us</p>
+            </div>
+            
+            <form id="payment-form" class="p-6 space-y-4">
+                @csrf
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Your Name</label>
+                    <input type="text" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#b82a36]" placeholder="Enter your name">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Email Address *</label>
+                    <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#b82a36]" placeholder="your.email@example.com">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-semibold mb-2">Gift Amount (GH₵) *</label>
+                    <input type="number" name="amount" required min="1" step="0.01" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#b82a36]" placeholder="Enter amount">
+                    <p class="text-sm text-gray-500 mt-1">Minimum: GH₵ 1.00</p>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closePaymentModal()" class="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 px-4 py-3 bg-[#b82a36] hover:bg-[#d4af37] text-white rounded-lg font-semibold transition shadow-md hover:shadow-lg">
+                        Continue to Payment
+                    </button>
+                </div>
+            </form>
+
+            <div id="payment-status" class="hidden px-6 pb-6"></div>
+        </div>
+    </div>
 
     <!-- Contact Section -->
     <section id="contact" class="py-20 bg-gradient-to-b from-white to-gray-50">
@@ -582,6 +623,122 @@
                 nav.classList.add('scrolled');
             } else {
                 nav.classList.remove('scrolled');
+            }
+        });
+
+        // Payment Modal Functions
+        function openPaymentModal() {
+            document.getElementById('payment-modal').classList.remove('hidden');
+            document.getElementById('payment-modal').classList.add('flex');
+        }
+
+        function closePaymentModal(event) {
+            if (!event || event.target.id === 'payment-modal') {
+                document.getElementById('payment-modal').classList.add('hidden');
+                document.getElementById('payment-modal').classList.remove('flex');
+                document.getElementById('payment-form').reset();
+                document.getElementById('payment-status').classList.add('hidden');
+            }
+        }
+
+        // Payment Form Submission with Paystack
+        document.getElementById('payment-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitButton = this.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            
+            submitButton.disabled = true;
+            submitButton.textContent = 'Processing...';
+
+            try {
+                const response = await fetch('{{ route("payment.initialize") }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        amount: formData.get('amount')
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Initialize Paystack Popup
+                    const popup = new PaystackPop();
+                    popup.resumeTransaction(data.data.access_code, {
+                        onSuccess: (transaction) => {
+                            showPaymentSuccess(transaction.reference);
+                        },
+                        onCancel: () => {
+                            submitButton.disabled = false;
+                            submitButton.textContent = originalText;
+                            alert('Payment cancelled');
+                        }
+                    });
+                } else {
+                    alert(data.message || 'Failed to initialize payment. Please try again.');
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                }
+            } catch (error) {
+                console.error('Payment error:', error);
+                alert('An error occurred. Please try again.');
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+            }
+        });
+
+        function showPaymentSuccess(reference) {
+            const form = document.getElementById('payment-form');
+            const statusDiv = document.getElementById('payment-status');
+            
+            form.classList.add('hidden');
+            statusDiv.classList.remove('hidden');
+            statusDiv.innerHTML = `
+                <div class="text-center py-6">
+                    <div class="text-6xl mb-4">✅</div>
+                    <h4 class="text-2xl font-bold text-green-600 mb-2">Payment Successful!</h4>
+                    <p class="text-gray-600 mb-4">Thank you for your generous gift!</p>
+                    <p class="text-sm text-gray-500 mb-4">Reference: ${reference}</p>
+                    <button onclick="closePaymentModal()" class="px-6 py-3 bg-[#b82a36] hover:bg-[#d4af37] text-white rounded-lg font-semibold transition">
+                        Close
+                    </button>
+                </div>
+            `;
+
+            setTimeout(() => {
+                closePaymentModal();
+                statusDiv.classList.add('hidden');
+                document.getElementById('payment-form').classList.remove('hidden');
+                document.getElementById('payment-form').reset();
+            }, 8000);
+        }
+
+        // Check for payment callback on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentReference = urlParams.get('payment_reference');
+            
+            if (paymentReference) {
+                // Verify the payment
+                fetch(`{{ route("payment.verify") }}?reference=${paymentReference}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success && data.data.status === 'success') {
+                            openPaymentModal();
+                            showPaymentSuccess(paymentReference);
+                        }
+                        // Clean up URL
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    })
+                    .catch(error => console.error('Verification error:', error));
             }
         });
     </script>
