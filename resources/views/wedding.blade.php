@@ -38,11 +38,12 @@
         }
         nav {
             background: transparent;
+            top: 52px;
         }
         nav.scrolled {
             background: linear-gradient(to bottom, rgba(255, 255, 255, 0.98) 0%, rgba(248, 245, 240, 0.98) 100%);
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(184, 42, 54, 0.08);
+            box-shadow: none;
             border-bottom: 2px solid;
             border-image: linear-gradient(to right, transparent, #d4af37, transparent) 1;
         }
@@ -111,12 +112,35 @@
         nav.scrolled .nav-link {
             transition: all 0.3s ease;
         }
+        #notification-bar {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        #notification-bar.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
     </style>
 </head>
 <body class="smooth-scroll bg-gray-50">
     
+    <!-- Top Notification Bar -->
+    <div id="notification-bar" class="fixed top-0 w-full bg-[#b82a36] text-white px-4 z-50 shadow-lg" style="height: 52px; display: flex; align-items: center;">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex-1 text-center">
+                <p class="text-sm md:text-base font-semibold">
+                    <span class="inline-block mr-2">⚠️</span>
+                    <span>Confirming your attendance is <span class="font-bold text-[#d4af37]">REQUIRED</span>. RSVP Deadline: February 8, 2026</span>
+                    <a href="#rsvp" class="ml-3 underline hover:text-[#d4af37] transition">RSVP Now</a>
+                </p>
+            </div>
+            <button onclick="closeNotification()" class="ml-4 text-white hover:text-[#d4af37] transition text-xl leading-none">
+                ×
+            </button>
+        </div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 transition-all duration-300">
+    <nav class="fixed w-full z-40 transition-all duration-300" id="main-nav">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl font-bold nav-title">Johnson & Dorothy</h1>
@@ -646,6 +670,17 @@
                 messageDiv.classList.add('hidden');
             }, 5000);
         });
+
+        // Close notification bar
+        function closeNotification() {
+            const notificationBar = document.getElementById('notification-bar');
+            const mainNav = document.getElementById('main-nav');
+            notificationBar.classList.add('hidden');
+            setTimeout(() => {
+                notificationBar.style.display = 'none';
+                mainNav.style.top = '0';
+            }, 300);
+        }
 
         // Navbar background on scroll and active section detection
         window.addEventListener('scroll', function() {
