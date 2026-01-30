@@ -86,13 +86,16 @@
             height: 2px;
             bottom: 0;
             left: 50%;
-            background: linear-gradient(to right, #b82a36, #d4af37);
+            background: #d4af37;
             transition: all 0.3s ease;
             transform: translateX(-50%);
-            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
         }
         .nav-link:hover::after {
             width: 100%;
+        }
+        nav.scrolled .nav-link::after {
+            background: linear-gradient(to right, #b82a36, #d4af37);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
         }
         nav.scrolled .nav-link:hover {
             color: #b82a36;
@@ -123,8 +126,14 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero-gradient min-h-screen flex items-center justify-center text-white pt-16 fade-in">
-        <div class="text-center px-4">
+    <section id="home" class="relative min-h-screen flex items-center justify-center text-white pt-16 fade-in overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="/images/couple-photo-2.jpg" alt="Johnson and Dorothy" class="w-full h-full object-cover" style="object-position: center -300px;">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#b82a36]/90 via-[#b82a36]/80 to-[#8b1f2b]/90"></div>
+        </div>
+        
+        <div class="text-center px-4 relative z-10">
             <h1 class="text-6xl md:text-8xl font-bold mb-4">Johnson & Dorothy</h1>
             <p class="text-xl md:text-2xl mb-6">warmly invite you to their Marriage Blessing</p>
             <div class="text-lg md:text-xl mb-8">
@@ -184,26 +193,28 @@
             </div>
 
             <!-- How We Met -->
-            <div class="grid md:grid-cols-2 gap-12 mb-16">
-                <div>
-                    <h3 class="love-story-subtitle font-bold mb-4 text-gray-800">How We Met</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Our story began in the most unexpected way. What started as a chance encounter on Facebook blossomed into a beautiful friendship, and eventually, the love of our lives. From that first conversation, we knew there was something special between us. The laughter came easily, the conversations flowed naturally, and before we knew it, we couldn't imagine our lives without each other.
-                    </p>
-                </div>
-                <div class="flex items-center justify-center">
-                    <div class="w-full h-64 bg-gradient-to-br from-[#b82a36] to-amber-500 rounded-lg flex items-center justify-center text-white text-xl">
-                        [Your Photo Here]
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="love-story-subtitle font-bold mb-4 text-gray-800">How We Met</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Our story began in the most unexpected way. What started as a chance encounter on Facebook blossomed into a beautiful friendship, and eventually, the love of our lives. From that first conversation, we knew there was something special between us. The laughter came easily, the conversations flowed naturally, and before we knew it, we couldn't imagine our lives without each other.
+                        </p>
+                    </div>
+                    
+                    <!-- Traditional Marriage -->
+                    <div>
+                        <h3 class="love-story-subtitle font-bold mb-4 text-gray-800">Our Traditional Marriage</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            In a beautiful ceremony that honored our heritage and traditions, our families came together to bless our union. Surrounded by loved ones, elders, and the rich customs that have been passed down through generations, we were joined in traditional marriage. It was a day filled with joy, cultural pride, and the deep recognition of two families becoming one. The ceremony marked not just the union of two hearts, but the coming together of two families in love, respect, and celebration of our shared future.
+                        </p>
                     </div>
                 </div>
-            </div>
-
-            <!-- Traditional Marriage -->
-            <div class="max-w-3xl mx-auto text-center">
-                <h3 class="love-story-subtitle font-bold mb-6 text-gray-800">Our Traditional Marriage</h3>
-                <p class="text-gray-600 leading-relaxed text-lg">
-                    In a beautiful ceremony that honored our heritage and traditions, our families came together to bless our union. Surrounded by loved ones, elders, and the rich customs that have been passed down through generations, we were joined in traditional marriage. It was a day filled with joy, cultural pride, and the deep recognition of two families becoming one. The ceremony marked not just the union of two hearts, but the coming together of two families in love, respect, and celebration of our shared future.
-                </p>
+                <div class="flex items-center justify-center">
+                    <div class="w-full h-[500px] rounded-lg overflow-hidden shadow-xl">
+                        <img src="/images/couple-photo-2.jpg" alt="Johnson and Dorothy" class="w-full h-full object-cover" style="object-position: center -100px;">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -519,8 +530,18 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-[#b82a36] text-white py-12">
-        <div class="container mx-auto px-4 text-center">
+    <footer class="relative text-white py-12 overflow-hidden" style="background: linear-gradient(135deg, #b82a36 0%, #8b1f2b 100%);">
+        <!-- Decorative Hearts -->
+        <div class="absolute inset-0 opacity-5">
+            <div id="footer-hearts" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 100 100&quot;><text y=&quot;.9em&quot; font-size=&quot;60&quot; fill=&quot;white&quot;>♡</text></svg>');
+                background-size: 120px 120px;
+                background-repeat: repeat;
+                width: 100%;
+                height: 200%;">
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 text-center relative z-10">
             <h3 class="text-4xl font-bold mb-4" style="font-family: 'Great Vibes', cursive;">Thank you for celebrating with us</h3>
             <p class="text-xl mb-2">Johnson & Dorothy</p>
             <p class="text-white/80">February 21st, 2026</p>
@@ -741,6 +762,30 @@
                     .catch(error => console.error('Verification error:', error));
             }
         });
+
+        // Footer Hearts Animation with JavaScript
+        (function() {
+            const footerHearts = document.getElementById('footer-hearts');
+            
+            if (footerHearts) {
+                let heartsPosition = 0;
+                const patternSize = 120; // Match the background-size
+
+                // Animate the hearts floating upward with seamless loop
+                function animateHearts() {
+                    heartsPosition -= 0.3;
+                    // Reset when one full pattern height has scrolled
+                    if (heartsPosition <= -patternSize) {
+                        heartsPosition = 0;
+                    }
+                    footerHearts.style.transform = `translateY(${heartsPosition}px)`;
+                    requestAnimationFrame(animateHearts);
+                }
+
+                // Start animation
+                animateHearts();
+            }
+        })();
     </script>
 </body>
 </html>
