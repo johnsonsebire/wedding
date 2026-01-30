@@ -90,8 +90,15 @@
             transition: all 0.3s ease;
             transform: translateX(-50%);
         }
-        .nav-link:hover::after {
+        .nav-link:hover::after,
+        .nav-link.active::after {
             width: 100%;
+        }
+        .nav-link.active {
+            font-weight: 600;
+        }
+        nav.scrolled .nav-link.active {
+            color: #b82a36;
         }
         nav.scrolled .nav-link::after {
             background: linear-gradient(to right, #b82a36, #d4af37);
@@ -222,8 +229,8 @@
     <!-- Wedding Details Section -->
     <section id="details" class="py-20 bg-[#b82a36]">
         <div class="container mx-auto px-4">
-            <h2 class="love-story-title font-bold text-center mb-12 text-white">Schedule & Details</h2>
-            <p class="text-center text-xl text-white/90 mb-12">Join us for a day of love, laughter, and celebration</p>
+            <h2 class="love-story-title font-bold text-center mb-4 text-white">Schedule & Details</h2>
+            <p class="text-center text-xl text-white/90 mb-8">Join us for a day of love, laughter, and celebration</p>
 
             <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8 md:p-12">
                 <!-- Venue Details -->
@@ -357,7 +364,10 @@
     <!-- Gifts Section -->
     <section id="gifts" class="py-20 bg-[#b82a36]">
         <div class="container mx-auto px-4">
-            <h2 class="text-5xl font-bold text-center mb-6 text-white" style="font-family: 'Great Vibes', cursive;">Gifts & Contributions ♡</h2>
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-4 text-white">♡</div>
+                <h2 class="text-5xl font-bold text-white" style="font-family: 'Great Vibes', cursive;">Gifts & Contributions</h2>
+            </div>
             <p class="text-center text-white/90 mb-12 max-w-3xl mx-auto">
                 We're so thankful for your love and thoughtfulness as we celebrate our special day. If you'd like to give us a gift, we humbly request a cash contribution — but please know we'll treasure any gift given with love.
             </p>
@@ -637,7 +647,7 @@
             }, 5000);
         });
 
-        // Navbar background on scroll
+        // Navbar background on scroll and active section detection
         window.addEventListener('scroll', function() {
             const nav = document.querySelector('nav');
             if (window.scrollY > 50) {
@@ -645,6 +655,27 @@
             } else {
                 nav.classList.remove('scrolled');
             }
+
+            // Active section detection
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
         });
 
         // Payment Modal Functions
