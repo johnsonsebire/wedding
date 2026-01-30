@@ -521,7 +521,7 @@
     <!-- Footer -->
     <footer class="bg-[#b82a36] text-white py-12">
         <div class="container mx-auto px-4 text-center">
-            <h3 class="text-3xl font-bold mb-4" style="font-family: 'Great Vibes', cursive;">Thank you for celebrating with us</h3>
+            <h3 class="text-4xl font-bold mb-4" style="font-family: 'Great Vibes', cursive;">Thank you for celebrating with us</h3>
             <p class="text-xl mb-2">Johnson & Dorothy</p>
             <p class="text-white/80">February 21st, 2026</p>
             <p class="mt-6 text-white/80">With love and gratitude ♡</p>
