@@ -8,6 +8,10 @@ Route::get('/', function () {
     return view('wedding');
 });
 
+Route::get('/gallery', function () {
+    return view('gallery');
+})->name('gallery');
+
 Route::post('/rsvp', [RsvpController::class, 'store'])->name('rsvp.store');
 
 // Payment routes

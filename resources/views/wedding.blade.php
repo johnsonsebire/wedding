@@ -9,6 +9,9 @@
     <script src="https://js.paystack.co/v2/inline.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-padding-top: 120px;
+        }
         body {
             font-family: 'Lato', sans-serif;
         }
@@ -119,6 +122,14 @@
             transform: translateY(-100%);
             opacity: 0;
         }
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .mobile-menu.active {
+            max-height: 400px;
+        }
     </style>
 </head>
 <body class="smooth-scroll bg-gray-50">
@@ -127,13 +138,14 @@
     <div id="notification-bar" class="fixed top-0 w-full bg-[#b82a36] text-white px-4 z-50 shadow-lg" style="height: 52px; display: flex; align-items: center;">
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex-1 text-center">
-                <p class="text-sm md:text-base font-semibold">
-                    <span class="inline-block mr-2">⚠️</span>
-                    <span>Confirming your attendance is <span class="font-bold text-[#d4af37]">REQUIRED</span>. RSVP Deadline: February 8, 2026</span>
-                    <a href="#rsvp" class="ml-3 underline hover:text-[#d4af37] transition">RSVP Now</a>
+                <p class="text-xs sm:text-sm md:text-base font-semibold">
+                    <span class="inline-block mr-1 sm:mr-2">⚠️</span>
+                    <span class="hidden sm:inline">Confirming your attendance is <span class="font-bold text-[#d4af37]">REQUIRED</span>. RSVP Deadline: February 8, 2026</span>
+                    <span class="sm:hidden"><span class="font-bold text-[#d4af37]">RSVP REQUIRED</span> by Feb 8</span>
+                    <a href="#rsvp" class="ml-2 sm:ml-3 underline hover:text-[#d4af37] transition">RSVP Now</a>
                 </p>
             </div>
-            <button onclick="closeNotification()" class="ml-4 text-white hover:text-[#d4af37] transition text-xl leading-none">
+            <button onclick="closeNotification()" class="ml-2 sm:ml-4 text-white hover:text-[#d4af37] transition text-xl leading-none">
                 ×
             </button>
         </div>
@@ -143,7 +155,7 @@
     <nav class="fixed w-full z-40 transition-all duration-300" id="main-nav">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <h1 class="text-2xl font-bold nav-title">Johnson & Dorothy</h1>
+                <h1 class="text-xl sm:text-2xl font-bold nav-title">Johnson & Dorothy</h1>
                 <div class="hidden md:flex space-x-6">
                     <a href="#home" class="nav-link transition">Home</a>
                     <a href="#story" class="nav-link transition">Our Story</a>
@@ -151,6 +163,23 @@
                     <a href="#rsvp" class="nav-link transition">RSVP</a>
                     <a href="#gifts" class="nav-link transition">Gifts</a>
                     <a href="#contact" class="nav-link transition">Contact</a>
+                </div>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu md:hidden">
+                <div class="flex flex-col space-y-3 pt-4 pb-2">
+                    <a href="#home" class="nav-link transition text-center py-2">Home</a>
+                    <a href="#story" class="nav-link transition text-center py-2">Our Story</a>
+                    <a href="#details" class="nav-link transition text-center py-2">Details</a>
+                    <a href="#rsvp" class="nav-link transition text-center py-2">RSVP</a>
+                    <a href="#gifts" class="nav-link transition text-center py-2">Gifts</a>
+                    <a href="#contact" class="nav-link transition text-center py-2">Contact</a>
                 </div>
             </div>
         </div>
@@ -165,33 +194,34 @@
         </div>
         
         <div class="text-center px-4 relative z-10">
-            <h1 class="text-6xl md:text-8xl font-bold mb-4">Johnson & Dorothy</h1>
-            <p class="text-xl md:text-2xl mb-6">warmly invite you to their Marriage Blessing</p>
-            <div class="text-lg md:text-xl mb-8">
-                <p id="wedding-date">Saturday, February 21st, 2026 • Ayiwa Lodge • 10:00 AM</p>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-4">Johnson & Dorothy</h1>
+            <p class="text-lg sm:text-xl md:text-2xl mb-6">warmly invite you to their Marriage Blessing</p>
+            <div class="text-base sm:text-lg md:text-xl mb-8">
+                <p id="wedding-date" class="hidden sm:block">Saturday, February 21st, 2026 • Ayiwa Lodge • 10:00 AM</p>
+                <p class="sm:hidden">Saturday, February 21st, 2026<br>Ayiwa Lodge • 10:00 AM</p>
             </div>
-            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
-                <a href="#rsvp" class="bg-white text-[#b82a36] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">RSVP Now</a>
-                <a href="#details" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-[#b82a36] transition">View Details</a>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="#rsvp" class="bg-white text-[#b82a36] px-6 sm:px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">RSVP Now</a>
+                <a href="#details" class="border-2 border-white text-white px-6 sm:px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-[#b82a36] transition">View Details</a>
             </div>
             <!-- Countdown Timer -->
             <div class="mt-12">
-                <div id="countdown" class="flex justify-center space-x-6 text-center">
+                <div id="countdown" class="flex justify-center space-x-3 sm:space-x-6 text-center">
                     <div>
-                        <div class="text-4xl font-bold" id="days">0</div>
-                        <div class="text-sm">Days</div>
+                        <div class="text-2xl sm:text-3xl md:text-4xl font-bold" id="days">0</div>
+                        <div class="text-xs sm:text-sm">Days</div>
                     </div>
                     <div>
-                        <div class="text-4xl font-bold" id="hours">0</div>
-                        <div class="text-sm">Hours</div>
+                        <div class="text-2xl sm:text-3xl md:text-4xl font-bold" id="hours">0</div>
+                        <div class="text-xs sm:text-sm">Hours</div>
                     </div>
                     <div>
-                        <div class="text-4xl font-bold" id="minutes">0</div>
-                        <div class="text-sm">Minutes</div>
+                        <div class="text-2xl sm:text-3xl md:text-4xl font-bold" id="minutes">0</div>
+                        <div class="text-xs sm:text-sm">Minutes</div>
                     </div>
                     <div>
-                        <div class="text-4xl font-bold" id="seconds">0</div>
-                        <div class="text-sm">Seconds</div>
+                        <div class="text-2xl sm:text-3xl md:text-4xl font-bold" id="seconds">0</div>
+                        <div class="text-xs sm:text-sm">Seconds</div>
                     </div>
                 </div>
             </div>
@@ -242,7 +272,7 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-center">
-                    <div class="w-full h-[500px] rounded-lg overflow-hidden shadow-xl">
+                    <div class="w-full h-[300px] sm:h-[400px] md:h-[500px] rounded-lg overflow-hidden shadow-xl">
                         <img src="/images/couple-photo-2.jpg" alt="Johnson and Dorothy" class="w-full h-full object-cover" style="object-position: center -100px;">
                     </div>
                 </div>
@@ -579,6 +609,24 @@
             <h3 class="text-4xl font-bold mb-4" style="font-family: 'Great Vibes', cursive;">Thank you for celebrating with us</h3>
             <p class="text-xl mb-2">Johnson & Dorothy</p>
             <p class="text-white/80">February 21st, 2026</p>
+            
+            <!-- Privacy Notice -->
+            <div class="mt-8 max-w-2xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <div class="flex items-start gap-3 text-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Privacy Request</h4>
+                        <p class="text-sm text-white/90 leading-relaxed">
+                            We kindly ask that you do not share photos or details from our special day on social media. 
+                            We prefer to keep our celebration private and intimate. After the event, we will share official 
+                            photos on our <a href="/gallery" class="underline hover:text-[#d4af37] transition">dedicated gallery page</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
             <p class="mt-6 text-white/80">With love and gratitude ♡</p>
         </div>
     </footer>
@@ -609,15 +657,21 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // Smooth Scrolling
+        // Smooth Scrolling with offset for fixed header
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    const notificationBar = document.getElementById('notification-bar');
+                    const notificationHeight = notificationBar && !notificationBar.classList.contains('hidden') ? notificationBar.offsetHeight : 0;
+                    const navHeight = document.querySelector('nav').offsetHeight;
+                    const totalOffset = notificationHeight + navHeight + 10;
+                    
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - totalOffset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
                     });
                 }
             });
@@ -680,6 +734,21 @@
                 notificationBar.style.display = 'none';
                 mainNav.style.top = '0';
             }, 300);
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            mobileMenu.classList.toggle('active');
+            
+            // Close menu when clicking a link
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                });
+            });
         }
 
         // Navbar background on scroll and active section detection
