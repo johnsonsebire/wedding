@@ -24,7 +24,7 @@ class AdminUserSeeder extends Seeder
 
         $this->command->info('Admin user created successfully!');
         $this->command->info('Email: johnson@manifestghana.com.com');
-        $this->command->info('Password: password');
+        $this->command->info('Password: ' . config('app.default_admin_password', 'password'));
         $this->command->warn('Please change the password after first login!');
     }
 }
