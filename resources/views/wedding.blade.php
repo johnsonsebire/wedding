@@ -226,8 +226,8 @@
             <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-4">Johnson & Dorothy</h1>
             <p class="text-lg sm:text-xl md:text-2xl mb-6">warmly invite you to their Marriage Blessing & Baby Dedication</p>
             <div class="text-base sm:text-lg md:text-xl mb-8">
-                <p id="wedding-date" class="hidden sm:block">Saturday, February 21st, 2026 • Ayiwa Lodge • 10:00 AM</p>
-                <p class="sm:hidden">Saturday, February 21st, 2026<br>Ayiwa Lodge • 10:00 AM</p>
+                <p id="wedding-date" class="hidden sm:block">Saturday, February 21st, 2026 • Kharis Christian Centre • 10:00 AM</p>
+                <p class="sm:hidden">Saturday, February 21st, 2026<br> Kharis Christian Centre • 10:00 AM</p>
             </div>
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                 <a href="#rsvp" class="bg-white text-[#b82a36] px-6 sm:px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">RSVP Now</a>
