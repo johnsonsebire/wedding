@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
     return view('wedding');
@@ -19,3 +21,15 @@ Route::post('/payment/initialize', [PaymentController::class, 'initializePayment
 Route::get('/payment/verify', [PaymentController::class, 'verifyPayment'])->name('payment.verify');
 Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->name('payment.callback');
 Route::post('/payment/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook');
+
+// Auth routes
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Admin routes - protected by auth middleware
+Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/rsvps', [AdminController::class, 'rsvps'])->name('admin.rsvps');
+    Route::get('/payments', [AdminController::class, 'payments'])->name('admin.payments');
+});

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -50,6 +51,17 @@ class PaymentController extends Controller
             $data = $response->json();
 
             if ($response->successful() && $data['status']) {
+                // Save payment to database as pending
+                Payment::create([
+                    'reference' => $data['data']['reference'],
+                    'name' => $validated['name'] ?? 'Anonymous',
+                    'email' => $validated['email'],
+                    'amount' => $validated['amount'],
+                    'currency' => 'GHS',
+                    'status' => 'pending',
+                    'metadata' => json_encode($data['data']),
+                ]);
+
                 return response()->json([
                     'success' => true,
                     'data' => $data['data']
@@ -90,6 +102,15 @@ class PaymentController extends Controller
             $data = $response->json();
 
             if ($response->successful() && $data['status']) {
+                // Update payment status if successful
+                if ($data['data']['status'] === 'success') {
+                    Payment::where('reference', $reference)->update([
+                        'status' => 'success',
+                        'paid_at' => now(),
+                        'metadata' => json_encode($data['data']),
+                    ]);
+                }
+
                 return response()->json([
                     'success' => true,
                     'data' => $data['data']
@@ -141,6 +162,13 @@ class PaymentController extends Controller
         if ($event['event'] === 'charge.success') {
             $data = $event['data'];
             
+            // Update payment in database
+            Payment::where('reference', $data['reference'])->update([
+                'status' => 'success',
+                'paid_at' => now(),
+                'metadata' => json_encode($data),
+            ]);
+            
             // Log successful payment
             Log::info('Payment successful', [
                 'reference' => $data['reference'],
@@ -148,8 +176,6 @@ class PaymentController extends Controller
                 'email' => $data['customer']['email'],
                 'name' => $data['metadata']['name'] ?? 'Anonymous',
             ]);
-
-            // You can store this in database, send email, etc.
         }
 
         return response()->json(['message' => 'Webhook received']);
