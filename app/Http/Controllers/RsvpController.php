@@ -20,9 +20,13 @@ class RsvpController extends Controller
 
         $rsvp = Rsvp::create($validated);
 
+        $message = $validated['attending']
+            ? 'Thank you for your RSVP! We look forward to celebrating with you.'
+            : 'Thank you for letting us know. We\'ll miss you on our special day!';
+
         return response()->json([
             'success' => true,
-            'message' => 'Thank you for your RSVP! We look forward to celebrating with you.',
+            'message' => $message,
             'data' => $rsvp
         ], 201);
     }
