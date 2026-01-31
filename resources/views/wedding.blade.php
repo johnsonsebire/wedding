@@ -115,6 +115,17 @@
         nav.scrolled .nav-link {
             transition: all 0.3s ease;
         }
+        nav.scrolled #mobile-menu-btn {
+            color: #4a4a4a;
+        }
+        .hero-bg-image {
+            object-position: center top;
+        }
+        @media (min-width: 768px) {
+            .hero-bg-image {
+                object-position: center -300px;
+            }
+        }
         #notification-bar {
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
@@ -126,9 +137,19 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
+            background: rgba(184, 42, 54, 0.98);
+            backdrop-filter: blur(10px);
+            margin: 0 -1rem;
+            padding: 0 1rem;
         }
         .mobile-menu.active {
             max-height: 400px;
+        }
+        nav.scrolled .mobile-menu {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.98) 0%, rgba(248, 245, 240, 0.98) 100%);
+        }
+        nav.scrolled .mobile-menu .nav-link {
+            color: #4a4a4a;
         }
     </style>
 </head>
@@ -165,9 +186,17 @@
                     <a href="#contact" class="nav-link transition">Contact</a>
                 </div>
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none" onclick="toggleMobileMenu()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                <button id="mobile-menu-btn" class="md:hidden focus:outline-none text-white" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                        <circle cx="6" cy="6" r="1.5"/>
+                        <circle cx="12" cy="6" r="1.5"/>
+                        <circle cx="18" cy="6" r="1.5"/>
+                        <circle cx="6" cy="12" r="1.5"/>
+                        <circle cx="12" cy="12" r="1.5"/>
+                        <circle cx="18" cy="12" r="1.5"/>
+                        <circle cx="6" cy="18" r="1.5"/>
+                        <circle cx="12" cy="18" r="1.5"/>
+                        <circle cx="18" cy="18" r="1.5"/>
                     </svg>
                 </button>
             </div>
@@ -189,7 +218,7 @@
     <section id="home" class="relative min-h-screen flex items-center justify-center text-white pt-16 fade-in overflow-hidden">
         <!-- Background Image with Overlay -->
         <div class="absolute inset-0 z-0">
-            <img src="/images/couple-photo-2.jpg" alt="Johnson and Dorothy" class="w-full h-full object-cover" style="object-position: center -300px;">
+            <img src="/images/couple-photo-2.jpg" alt="Johnson and Dorothy" class="w-full h-full object-cover hero-bg-image">
             <div class="absolute inset-0 bg-gradient-to-b from-[#b82a36]/90 via-[#b82a36]/80 to-[#8b1f2b]/90"></div>
         </div>
         
@@ -829,8 +858,28 @@
                     // Initialize Paystack Popup
                     const popup = new PaystackPop();
                     popup.resumeTransaction(data.data.access_code, {
-                        onSuccess: (transaction) => {
-                            showPaymentSuccess(transaction.reference);
+                        onSuccess: async (transaction) => {
+                            // Verify payment on backend
+                            try {
+                                const verifyResponse = await fetch(`{{ route("payment.verify") }}?reference=${transaction.reference}`, {
+                                    headers: {
+                                        'Accept': 'application/json',
+                                    }
+                                });
+                                const verifyData = await verifyResponse.json();
+                                
+                                if (verifyData.success && verifyData.data.status === 'success') {
+                                    showPaymentSuccess(transaction.reference);
+                                } else {
+                                    alert('Payment verification failed. Please contact support with reference: ' + transaction.reference);
+                                }
+                            } catch (error) {
+                                console.error('Verification error:', error);
+                                alert('Payment may have been successful but verification failed. Reference: ' + transaction.reference);
+                            }
+                            
+                            submitButton.disabled = false;
+                            submitButton.textContent = originalText;
                         },
                         onCancel: () => {
                             submitButton.disabled = false;
