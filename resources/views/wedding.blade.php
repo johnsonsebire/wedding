@@ -224,7 +224,7 @@
         
         <div class="text-center px-4 relative z-10">
             <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold mb-4">Johnson & Dorothy</h1>
-            <p class="text-lg sm:text-xl md:text-2xl mb-6">warmly invite you to their Marriage Blessing</p>
+            <p class="text-lg sm:text-xl md:text-2xl mb-6">warmly invite you to their Marriage Blessing & Baby Dedication</p>
             <div class="text-base sm:text-lg md:text-xl mb-8">
                 <p id="wedding-date" class="hidden sm:block">Saturday, February 21st, 2026 • Ayiwa Lodge • 10:00 AM</p>
                 <p class="sm:hidden">Saturday, February 21st, 2026<br>Ayiwa Lodge • 10:00 AM</p>
