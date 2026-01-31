@@ -218,7 +218,7 @@
     <section id="home" class="relative min-h-screen flex items-center justify-center text-white pt-16 fade-in overflow-hidden">
         <!-- Background Image with Overlay -->
         <div class="absolute inset-0 z-0">
-            <img src="/images/couple-photo-2.jpg" alt="Johnson and Dorothy" class="w-full h-full object-cover hero-bg-image">
+            <img src="/images/couple-photo.jpg" alt="Johnson and Dorothy" class="w-full h-full object-cover hero-bg-image">
             <div class="absolute inset-0 bg-gradient-to-b from-[#b82a36]/90 via-[#b82a36]/80 to-[#8b1f2b]/90"></div>
         </div>
         
@@ -294,7 +294,7 @@
                     
                     <!-- Traditional Marriage -->
                     <div>
-                        <h3 class="love-story-subtitle font-bold mb-4 text-gray-800">Our Traditional Marriage</h3>
+                        <h3 class="love-story-subtitle font-bold mb-4 text-gray-800">Traditional Marriage</h3>
                         <p class="text-gray-600 leading-relaxed">
                             In a beautiful ceremony that honored our heritage and traditions, our families came together to bless our union. Surrounded by loved ones, elders, and the rich customs that have been passed down through generations, we were joined in traditional marriage. It was a day filled with joy, cultural pride, and the deep recognition of two families becoming one. The ceremony marked not just the union of two hearts, but the coming together of two families in love, respect, and celebration of our shared future.
                         </p>
@@ -302,7 +302,7 @@
                 </div>
                 <div class="flex items-center justify-center">
                     <div class="w-full h-[300px] sm:h-[400px] md:h-[500px] rounded-lg overflow-hidden shadow-xl">
-                        <img src="/images/couple-photo-2.jpg" alt="Johnson and Dorothy" class="w-full h-full object-cover" style="object-position: center -100px;">
+                        <img src="/images/couple-photo.jpg" alt="Johnson and Dorothy" class="w-full h-full object-cover" style="object-position: center -100px;">
                     </div>
                 </div>
             </div>
@@ -452,7 +452,7 @@
                 <h2 class="text-5xl font-bold text-white" style="font-family: 'Great Vibes', cursive;">Gifts & Contributions</h2>
             </div>
             <p class="text-center text-white/90 mb-12 max-w-3xl mx-auto">
-                We're so thankful for your love and thoughtfulness as we celebrate our special day. If you'd like to give us a gift, we humbly request a cash contribution — but please know we'll treasure any gift given with love.
+                We are deeply grateful for your love and thoughtfulness as we celebrate this special day. Should you wish to honor us with a gift, we kindly welcome a cash contribution. However, whatever you choose to give from the heart will be cherished by us forever.
             </p>
 
             <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">

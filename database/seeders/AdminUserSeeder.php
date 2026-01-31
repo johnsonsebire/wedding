@@ -15,15 +15,15 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate(
-            ['email' => 'admin@wedding.com'],
+            ['email' => 'johnson@manifestghana.com'],
             [
-                'name' => 'Admin',
-                'password' => Hash::make('password'),
+                'name' => 'Johnson Sebire',
+                'password' => Hash::make(config('app.default_admin_password', 'password')),
             ]
         );
 
         $this->command->info('Admin user created successfully!');
-        $this->command->info('Email: admin@wedding.com');
+        $this->command->info('Email: johnson@manifestghana.com.com');
         $this->command->info('Password: password');
         $this->command->warn('Please change the password after first login!');
     }

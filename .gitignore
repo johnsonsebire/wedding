@@ -27,3 +27,8 @@ Thumbs.db
 PAYSTACK_INTEGRATION.md
 PAYSTACK_SETUP.md
 SETUP_PAYMENT.txt
+
+# Deployment files with sensitive configuration
+deploy.php
+deploy.md
+DEPLOYMENT.md

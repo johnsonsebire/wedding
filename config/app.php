@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Default Admin Password
+    |--------------------------------------------------------------------------
+    |
+    | This password is used when seeding the default admin user account.
+    | You should change this in your .env file and update the password
+    | after first login for security purposes.
+    |
+    */
+
+    'default_admin_password' => env('DEFAULT_ADMIN_PASSWORD', 'password'),
+
 ];
