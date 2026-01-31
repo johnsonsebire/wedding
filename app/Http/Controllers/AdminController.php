@@ -16,6 +16,7 @@ class AdminController extends Controller
         $attendingCount = Rsvp::where('attending', true)->count();
         $notAttendingCount = Rsvp::where('attending', false)->count();
         $totalGuests = Rsvp::sum('guests');
+        $totalAttendingGuests = Rsvp::where('attending', true)->sum('guests');
         
         // Get payment statistics
         $totalPayments = Payment::where('status', 'success')->count();
@@ -36,6 +37,7 @@ class AdminController extends Controller
             'attendingCount',
             'notAttendingCount',
             'totalGuests',
+            'totalAttendingGuests',
             'totalPayments',
             'totalAmount',
             'pendingPayments',
@@ -46,7 +48,15 @@ class AdminController extends Controller
     
     public function rsvps()
     {
-        $rsvps = Rsvp::orderBy('created_at', 'desc')->paginate(20);
+        // Get unique RSVPs, prioritizing most recent submission for duplicates
+        $rsvps = Rsvp::select('rsvps.*')
+            ->whereIn('id', function($query) {
+                $query->selectRaw('MAX(id)')
+                    ->from('rsvps')
+                    ->groupBy(DB::raw('COALESCE(email, phone)'));
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
         return view('admin.rsvps', compact('rsvps'));
     }
     

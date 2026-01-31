@@ -18,6 +18,22 @@ class RsvpController extends Controller
             'message' => 'nullable|string|max:1000',
         ]);
 
+        // Check for duplicate RSVP based on email or phone
+        $existingRsvp = null;
+        if (!empty($validated['email'])) {
+            $existingRsvp = Rsvp::where('email', $validated['email'])->first();
+        }
+        if (!$existingRsvp && !empty($validated['phone'])) {
+            $existingRsvp = Rsvp::where('phone', $validated['phone'])->first();
+        }
+
+        if ($existingRsvp) {
+            return response()->json([
+                'success' => false,
+                'message' => 'You have already submitted an RSVP. If you need to make changes, please contact us directly.',
+            ], 422);
+        }
+
         $rsvp = Rsvp::create($validated);
 
         $message = $validated['attending']
