@@ -47,6 +47,7 @@
                 <a href="/admin" class="py-4 border-b-2 border-[#b82a36] text-[#b82a36] font-semibold">Dashboard</a>
                 <a href="/admin/rsvps" class="py-4 border-b-2 border-transparent hover:border-gray-300 text-gray-600 hover:text-gray-800">RSVPs</a>
                 <a href="/admin/payments" class="py-4 border-b-2 border-transparent hover:border-gray-300 text-gray-600 hover:text-gray-800">Payments</a>
+                <a href="/admin/profile" class="py-4 border-b-2 border-transparent hover:border-gray-300 text-gray-600 hover:text-gray-800">Profile</a>
             </div>
         </div>
     </nav>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
@@ -32,4 +33,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/rsvps', [AdminController::class, 'rsvps'])->name('admin.rsvps');
     Route::get('/payments', [AdminController::class, 'payments'])->name('admin.payments');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('admin.profile');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('admin.profile.password');
 });

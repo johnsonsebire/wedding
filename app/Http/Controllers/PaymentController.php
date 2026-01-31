@@ -11,8 +11,7 @@ class PaymentController extends Controller
 {
     private function getPaystackSecretKey()
     {
-        // Use test key for now - replace with your actual key
-        return env('PAYSTACK_SECRET_KEY', 'sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        return config('services.paystack.secret_key');
     }
 
     public function initializePayment(Request $request)
