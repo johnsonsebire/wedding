@@ -338,7 +338,7 @@
                             <div class="text-[#b82a36] text-2xl">📍</div>
                             <div>
                                 <div class="font-semibold text-gray-800">Location</div>
-                                <div class="text-gray-600">Ayiwa, Behind Achimota Melcolm!</div>
+                                <div class="text-gray-600">Ayiwa, Behind Achimota Melcom!</div>
                                 <a href="https://maps.app.goo.gl/5UjUzUAFJczvz19U6" target="_blank" class="text-[#b82a36] hover:underline mt-2 inline-block">View on Google Maps</a>
                             </div>
                         </div>
