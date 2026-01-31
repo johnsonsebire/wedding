@@ -32,7 +32,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/rsvps', [AdminController::class, 'rsvps'])->name('admin.rsvps');
+    Route::get('/rsvps/export', [AdminController::class, 'exportRsvps'])->name('admin.rsvps.export');
     Route::get('/payments', [AdminController::class, 'payments'])->name('admin.payments');
+    Route::get('/payments/export', [AdminController::class, 'exportPayments'])->name('admin.payments.export');
     Route::get('/profile', [ProfileController::class, 'show'])->name('admin.profile');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('admin.profile.password');
 });
