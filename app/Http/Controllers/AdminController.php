@@ -11,20 +11,28 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Get RSVP statistics
-        $totalRsvps = Rsvp::count();
-        $attendingCount = Rsvp::where('attending', true)->count();
-        $notAttendingCount = Rsvp::where('attending', false)->count();
-        $totalGuests = Rsvp::sum('guests');
-        $totalAttendingGuests = Rsvp::where('attending', true)->sum('guests');
+        // Get unique RSVP IDs (filtering duplicates based on email/phone)
+        $uniqueRsvpIds = Rsvp::selectRaw('MAX(id) as id')
+            ->groupBy(DB::raw('COALESCE(email, phone)'))
+            ->pluck('id');
+        
+        // Get RSVP statistics (using unique RSVPs only)
+        $totalRsvps = Rsvp::whereIn('id', $uniqueRsvpIds)->count();
+        $attendingCount = Rsvp::whereIn('id', $uniqueRsvpIds)->where('attending', true)->count();
+        $notAttendingCount = Rsvp::whereIn('id', $uniqueRsvpIds)->where('attending', false)->count();
+        $totalGuests = Rsvp::whereIn('id', $uniqueRsvpIds)->sum('guests');
+        $totalAttendingGuests = Rsvp::whereIn('id', $uniqueRsvpIds)->where('attending', true)->sum('guests');
         
         // Get payment statistics
         $totalPayments = Payment::where('status', 'success')->count();
         $totalAmount = Payment::where('status', 'success')->sum('amount');
         $pendingPayments = Payment::where('status', 'pending')->count();
         
-        // Get recent RSVPs
-        $recentRsvps = Rsvp::orderBy('created_at', 'desc')->limit(10)->get();
+        // Get recent RSVPs (unique only, most recent submission per person)
+        $recentRsvps = Rsvp::whereIn('id', $uniqueRsvpIds)
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
         
         // Get recent successful payments
         $recentPayments = Payment::where('status', 'success')
@@ -68,7 +76,14 @@ class AdminController extends Controller
 
     public function exportRsvps()
     {
-        $rsvps = Rsvp::orderBy('created_at', 'desc')->get();
+        // Get unique RSVP IDs (filtering duplicates)
+        $uniqueRsvpIds = Rsvp::selectRaw('MAX(id) as id')
+            ->groupBy(DB::raw('COALESCE(email, phone)'))
+            ->pluck('id');
+        
+        $rsvps = Rsvp::whereIn('id', $uniqueRsvpIds)
+            ->orderBy('created_at', 'desc')
+            ->get();
         
         $filename = 'rsvps_' . date('Y-m-d_His') . '.csv';
         
