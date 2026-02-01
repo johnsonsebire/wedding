@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <p class="text-3xl sm:text-4xl font-bold text-green-600">{{ $attendingCount }}</p>
-                <p class="text-xs sm:text-sm text-gray-500 mt-2">{{ $totalGuests }} total guests</p>
+                <p class="text-xs sm:text-sm text-gray-500 mt-2">{{ $totalAttendingGuests }} total guests</p>
             </div>
 
             <!-- Not Attending -->
