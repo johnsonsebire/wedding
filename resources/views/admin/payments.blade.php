@@ -55,6 +55,16 @@
     <!-- Main Content -->
     <div class="container mx-auto px-4 py-8">
         
+        <!-- Success Message -->
+        @if(session('success'))
+            <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                {{ session('success') }}
+            </div>
+        @endif
+        
         <div class="bg-white rounded-lg shadow-md">
             <div class="p-6 border-b border-gray-200 flex justify-between items-center">
                 <div>
@@ -80,6 +90,7 @@
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Reference</th>
                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
@@ -114,10 +125,21 @@
                                     <div class="text-sm text-gray-400">Not paid</div>
                                 @endif
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button 
+                                    onclick="confirmDelete({{ $payment->id }}, '{{ $payment->name }}', '{{ $payment->reference }}')"
+                                    class="text-red-600 hover:text-red-800 font-semibold flex items-center gap-1"
+                                    title="Delete payment"
+                                >
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                                 No payments received yet
                             </td>
                         </tr>
@@ -135,6 +157,73 @@
         </div>
         
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="bg-red-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">Delete Payment</h3>
+                </div>
+                <p class="text-gray-600 mb-2">Are you sure you want to delete this payment?</p>
+                <div class="bg-gray-50 p-3 rounded-lg mb-4">
+                    <p class="text-sm text-gray-700"><strong>Name:</strong> <span id="deleteName"></span></p>
+                    <p class="text-sm text-gray-700"><strong>Reference:</strong> <span id="deleteReference" class="font-mono"></span></p>
+                </div>
+                <p class="text-sm text-red-600 mb-6">This action cannot be undone.</p>
+                <div class="flex gap-3 justify-end">
+                    <button 
+                        onclick="closeDeleteModal()"
+                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 font-semibold"
+                    >
+                        Cancel
+                    </button>
+                    <form id="deleteForm" method="POST" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button 
+                            type="submit"
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold"
+                        >
+                            Delete Payment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmDelete(paymentId, name, reference) {
+            document.getElementById('deleteName').textContent = name;
+            document.getElementById('deleteReference').textContent = reference;
+            document.getElementById('deleteForm').action = `/admin/payments/${paymentId}`;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+
+        // Close modal on background click
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+    </script>
 
 </body>
 </html>

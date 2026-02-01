@@ -34,6 +34,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/rsvps', [AdminController::class, 'rsvps'])->name('admin.rsvps');
     Route::get('/rsvps/export', [AdminController::class, 'exportRsvps'])->name('admin.rsvps.export');
     Route::get('/payments', [AdminController::class, 'payments'])->name('admin.payments');
+    Route::delete('/payments/{payment}', [AdminController::class, 'deletePayment'])->name('admin.payments.delete');
     Route::get('/payments/export', [AdminController::class, 'exportPayments'])->name('admin.payments.export');
     Route::get('/profile', [ProfileController::class, 'show'])->name('admin.profile');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('admin.profile.password');

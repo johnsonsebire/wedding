@@ -74,6 +74,13 @@ class AdminController extends Controller
         return view('admin.payments', compact('payments'));
     }
 
+    public function deletePayment(Payment $payment)
+    {
+        $payment->delete();
+        
+        return redirect()->route('admin.payments')->with('success', 'Payment deleted successfully!');
+    }
+
     public function exportRsvps()
     {
         // Get unique RSVP IDs (filtering duplicates)
