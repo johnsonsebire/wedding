@@ -160,4 +160,32 @@ class AdminController extends Controller
         
         return response()->stream($callback, 200, $headers);
     }
+
+    public function editRsvp(Rsvp $rsvp)
+    {
+        return view('admin.rsvps-edit', compact('rsvp'));
+    }
+
+    public function updateRsvp(Request $request, Rsvp $rsvp)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'guests' => 'required|integer|min:1|max:10',
+            'attending' => 'required|boolean',
+            'message' => 'nullable|string|max:1000',
+        ]);
+
+        $rsvp->update($validated);
+
+        return redirect()->route('admin.rsvps')->with('success', 'RSVP updated successfully!');
+    }
+
+    public function deleteRsvp(Rsvp $rsvp)
+    {
+        $rsvp->delete();
+        
+        return redirect()->route('admin.rsvps')->with('success', 'RSVP deleted successfully!');
+    }
 }

@@ -19,19 +19,19 @@
     
     <!-- Header -->
     <header class="bg-[#b82a36] text-white shadow-lg">
-        <div class="container mx-auto px-4 py-6">
-            <div class="flex justify-between items-center">
+        <div class="container mx-auto px-4 py-4 sm:py-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold">Wedding Admin Dashboard</h1>
-                    <p class="text-white/80">Johnson & Dorothy - February 21st, 2026</p>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold">Wedding Admin Dashboard</h1>
+                    <p class="text-white/80 text-sm sm:text-base">Johnson & Dorothy - February 21st, 2026</p>
                 </div>
-                <div class="flex gap-3">
-                    <a href="/" class="bg-white text-[#b82a36] px-6 py-2 rounded-lg hover:bg-gray-100 transition font-semibold">
+                <div class="flex gap-2 sm:gap-3 w-full sm:w-auto">
+                    <a href="/" class="flex-1 sm:flex-none bg-white text-[#b82a36] px-4 sm:px-6 py-2 rounded-lg hover:bg-gray-100 transition font-semibold text-center text-sm sm:text-base">
                         View Website
                     </a>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}" class="flex-1 sm:flex-none">
                         @csrf
-                        <button type="submit" class="bg-white/10 text-white px-6 py-2 rounded-lg hover:bg-white/20 transition font-semibold border border-white/30">
+                        <button type="submit" class="w-full bg-white/10 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-white/20 transition font-semibold border border-white/30 text-sm sm:text-base">
                             Logout
                         </button>
                     </form>
@@ -43,23 +43,23 @@
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b">
         <div class="container mx-auto px-4">
-            <div class="flex space-x-8">
-                <a href="/admin" class="py-4 border-b-2 border-transparent hover:border-gray-300 text-gray-600 hover:text-gray-800">Dashboard</a>
-                <a href="/admin/rsvps" class="py-4 border-b-2 border-transparent hover:border-gray-300 text-gray-600 hover:text-gray-800">RSVPs</a>
-                <a href="/admin/payments" class="py-4 border-b-2 border-transparent hover:border-gray-300 text-gray-600 hover:text-gray-800">Payments</a>
-                <a href="/admin/profile" class="py-4 border-b-2 border-[#b82a36] text-[#b82a36] font-semibold">Profile</a>
+            <div class="flex space-x-4 sm:space-x-8 overflow-x-auto">
+                <a href="/admin" class="py-4 border-b-2 border-transparent hover:border-gray-300 text-gray-600 hover:text-gray-800 whitespace-nowrap text-sm sm:text-base">Dashboard</a>
+                <a href="/admin/rsvps" class="py-4 border-b-2 border-transparent hover:border-gray-300 text-gray-600 hover:text-gray-800 whitespace-nowrap text-sm sm:text-base">RSVPs</a>
+                <a href="/admin/payments" class="py-4 border-b-2 border-transparent hover:border-gray-300 text-gray-600 hover:text-gray-800 whitespace-nowrap text-sm sm:text-base">Payments</a>
+                <a href="/admin/profile" class="py-4 border-b-2 border-[#b82a36] text-[#b82a36] font-semibold whitespace-nowrap text-sm sm:text-base">Profile</a>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-4 sm:py-8">
         <div class="max-w-2xl mx-auto">
             
             <!-- Success Message -->
             @if(session('success'))
                 <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
                     {{ session('success') }}
@@ -67,8 +67,8 @@
             @endif
 
             <!-- Profile Information -->
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Profile Information</h2>
+            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Profile Information</h2>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-1">Name</label>
@@ -92,8 +92,8 @@
             </div>
 
             <!-- Change Password -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Change Password</h2>
+            <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Change Password</h2>
                 <form method="POST" action="{{ route('admin.profile.password') }}">
                     @csrf
                     @method('PUT')
