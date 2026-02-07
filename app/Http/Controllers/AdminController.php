@@ -188,4 +188,28 @@ class AdminController extends Controller
         
         return redirect()->route('admin.rsvps')->with('success', 'RSVP deleted successfully!');
     }
+
+    public function showRsvp(Rsvp $rsvp)
+    {
+        return view('admin.rsvps-show', compact('rsvp'));
+    }
+
+    public function messages()
+    {
+        // Get unique RSVPs with messages, prioritizing most recent submission
+        $rsvps = Rsvp::select('rsvps.*')
+            ->whereNotNull('message')
+            ->where('message', '!=', '')
+            ->whereIn('id', function($query) {
+                $query->selectRaw('MAX(id)')
+                    ->from('rsvps')
+                    ->whereNotNull('message')
+                    ->where('message', '!=', '')
+                    ->groupBy(DB::raw('COALESCE(email, phone)'));
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+        
+        return view('admin.messages', compact('rsvps'));
+    }
 }
