@@ -24,8 +24,10 @@ Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->
 Route::post('/payment/webhook', [PaymentController::class, 'handleWebhook'])->name('payment.webhook');
 
 // Auth routes
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+});
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Admin routes - protected by auth middleware
